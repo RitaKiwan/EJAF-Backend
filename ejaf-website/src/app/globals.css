@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --background: #020617;
+  --foreground: #e2e8f0;
+  --surface: rgba(15, 23, 42, 0.72);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(129, 140, 248, 0.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.08), transparent 28%),
+    linear-gradient(180deg, #020617 0%, #020617 50%, #050816 100%);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: radial-gradient(circle at center, black 45%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 85%);
+  opacity: 0.55;
+}
+
+html[dir="rtl"] body {
+  direction: rtl;
+  font-family: "Segoe UI", "Tahoma", "Arial", var(--font-geist-sans), sans-serif;
+}
+
+/* Reduce wide letter-spacing for Arabic text — wide tracking breaks Arabic script */
+html[dir="rtl"] [class*="tracking-["] {
+  letter-spacing: 0.04em;
+}
+
+html[dir="rtl"] nav,
+html[dir="rtl"] header,
+html[dir="rtl"] footer {
+  direction: rtl;
+}
+
+/* Flip flex rows for RTL so icons/badges stay on the correct side */
+html[dir="rtl"] .flex-row-rtl {
+  flex-direction: row-reverse;
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.28);
+  color: #f8fafc;
+}
+
+button,
+a,
+input,
+textarea {
+  transition-property: transform, color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.75);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(2, 6, 23, 0.95);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 3px solid rgba(2, 6, 23, 0.95);
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.5), rgba(129, 140, 248, 0.55));
+}
+
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
