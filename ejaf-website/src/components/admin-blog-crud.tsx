@@ -51,32 +51,10 @@ export function AdminBlogCrud({ initial, isAr }: Props) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    const tagsEnStr = typeof form.tags.en === "string" ? form.tags.en : "";
-    const tagsArStr = typeof form.tags.ar === "string" ? form.tags.ar : "";
-
-    if (
-      !form.title_en.trim() ||
-      !form.title_ar.trim() ||
-      !form.excerpt_en.trim() ||
-      !form.excerpt_ar.trim() ||
-      !form.content_en.trim() ||
-      !form.content_ar.trim() ||
-      !form.slug.trim() ||
-      !tagsEnStr.trim() ||
-      !tagsArStr.trim()
-    ) {
-      setError(
-        isAr
-          ? "يرجى تعبئة كافة الحقول المطلوبة وكتابة التاغات باللغتين!"
-          : "Please fill in all fields and provide tags in both languages!",
-      );
-      return;
-    }
-
     setLoading(true);
     setError("");
 
+    // تحويل المصفوفة إلى نص مفصول بفواصل ليقبلها Laravel
     const payload = {
       title_en: form.title_en,
       title_ar: form.title_ar,
@@ -84,25 +62,20 @@ export function AdminBlogCrud({ initial, isAr }: Props) {
       excerpt_ar: form.excerpt_ar,
       content_en: form.content_en,
       content_ar: form.content_ar,
-      slug: form.slug,
+      slug: form.slug.trim(),
       image: form.image || null,
       tags: {
-        en: tagsEnStr
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean),
-        ar: tagsArStr
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean),
+        en: Array.isArray(form.tags.en) ? form.tags.en.join(",") : form.tags.en,
+        ar: Array.isArray(form.tags.ar) ? form.tags.ar.join(",") : form.tags.ar,
       },
-      created_at_display: form.createdAt,
-      status: form.status,
+      created_at_display:
+        form.createdAt || new Date().toISOString().split("T")[0],
     };
 
     try {
       if (editId) {
         await updatePost(editId, payload);
+        // نستخدم form المتوافق مع الـ State لمنع خطوط TypeScript الحمراء
         setRecords(
           records.map((r) => (r.id === editId ? { ...form, id: editId } : r)),
         );
@@ -110,18 +83,34 @@ export function AdminBlogCrud({ initial, isAr }: Props) {
         const created = await createPost(payload);
         setRecords([...records, { ...form, id: String(created.id) }]);
       }
+
+      // تصفير النموذج عند النجاح
       setForm(empty());
       setEditId(null);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : isAr
-            ? "حدث خطأ أثناء الحفظ"
-            : "An error occurred while saving",
-      );
+    } catch (err: any) {
+      console.error("Validation or Saving Error:", err);
+
+      // فحص أخطاء الباك إيند وتخصيص الرسائل بناءً على لغة الواجهة الحالية isAr
+      if (
+        err.status === 422 ||
+        (err.message && err.message.includes("Validation"))
+      ) {
+        setError(
+          isAr
+            ? "فشل في حفظ المقال: يرجى التأكد من ملء جميع الحقول المطلوبة، وأن الرابط الثابت (Slug) مكتوب بالإنجليزية فقط وبدون مسافات."
+            : "Failed to save article: Please ensure all required fields are filled, and the (Slug) contains lowercase English characters only.",
+        );
+      } else {
+        setError(
+          err instanceof Error
+            ? err.message
+            : isAr
+              ? "حدث خطأ غير متوقع أثناء الحفظ."
+              : "An unexpected error occurred while saving.",
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -402,7 +391,7 @@ export function AdminBlogCrud({ initial, isAr }: Props) {
               value={form.image}
               onChange={(url) => setForm({ ...form, image: url })}
               label={isAr ? "صورة المقال" : "Post Image"}
-              isAr={tab === "ar"} // 🌟 هنا تكمن الخدعة السحرية: صندوق الرفع سيتبع لغة التبويب المفتوح حالياً!
+              isAr={isAr} // ✅ يتبع لغة الواجهة الكاملة وليس التبويب
             />
           </div>
         </div>

@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { navigationItems, siteCopy } from "@/data/site";
 import { createLocalizedHref, resolveLocale } from "@/lib/i18n";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const DEFAULT_LOGO = "/brand/EJAF Logo White.svg";
 
 export function SiteHeader() {
   const pathname = usePathname() || "/";
@@ -15,18 +18,40 @@ export function SiteHeader() {
   const locale = resolveLocale(searchParams.get("lang"));
   const copy = siteCopy[locale];
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(DEFAULT_LOGO);
+
+  // في الـ useEffect
+  useEffect(() => {
+    fetch(`${API_URL}/api/settings`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.logo_url) setLogoUrl(API_URL + data.logo_url);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/72 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <Link href={createLocalizedHref("/", locale, searchParams)} className="group inline-flex items-center gap-3">
-          <img src={encodeURI("/brand/EJAF Logo White.svg")} alt="EJAF" className="h-11 w-11 rounded-2xl object-contain" />
+        <Link
+          href={createLocalizedHref("/", locale, searchParams)}
+          className="group inline-flex items-center gap-3"
+        >
+          <img
+            src={logoUrl}
+            alt="EJAF"
+            className="h-11 w-11 rounded-2xl object-contain"
+            onError={() => setLogoUrl(DEFAULT_LOGO)}
+          />
           <span className="hidden flex-col sm:flex">
             <span className="text-xs text-slate-400">{copy.tagline}</span>
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-2 py-2 text-sm text-slate-300 lg:flex">
+        <nav
+          aria-label="Primary"
+          className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-2 py-2 text-sm text-slate-300 lg:flex"
+        >
           {navigationItems.map((item) => (
             <Link
               key={item.href}
@@ -47,12 +72,15 @@ export function SiteHeader() {
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="border-t border-white/10 bg-slate-950/95 backdrop-blur-xl lg:hidden">
           <nav className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">

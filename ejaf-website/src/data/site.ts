@@ -13,13 +13,15 @@ export const footerNavigationItems: NavItem[] = [
   { href: "/services", label: { en: "Capabilities", ar: "القدرات" } },
   { href: "/projects", label: { en: "Case Studies", ar: "دراسات الحالة" } },
   { href: "/blog", label: { en: "Insights", ar: "الرؤى" } },
-  { href: "/admin", label: { en: "Admin", ar: "الإدارة" } },
   { href: "/contact", label: { en: "Contact", ar: "التواصل" } },
 ];
 
 export const siteStats: SiteStat[] = [
   { value: "800+", label: { en: "Satisfied clients", ar: "عملاء راضون" } },
-  { value: "1,900+", label: { en: "Projects delivered", ar: "مشروعاً منجزاً" } },
+  {
+    value: "1,900+",
+    label: { en: "Projects delivered", ar: "مشروعاً منجزاً" },
+  },
   { value: "30+", label: { en: "Trusted partners", ar: "شريكاً موثوقاً" } },
   { value: "3", label: { en: "Local offices", ar: "مكاتب محلية" } },
 ];
@@ -54,7 +56,10 @@ export const companySummary: SectionCopy[] = [
 export const contactLocations: SectionCopy[] = [
   {
     eyebrow: { en: "Erbil", ar: "أربيل" },
-    title: { en: "Villa No. 384, G3 - Dream City", ar: "الفيلا رقم 384، G3 - دريم سيتي" },
+    title: {
+      en: "Villa No. 384, G3 - Dream City",
+      ar: "الفيلا رقم 384، G3 - دريم سيتي",
+    },
     description: {
       en: "Primary office for project coordination and client support.",
       ar: "المكتب الرئيسي لتنسيق المشاريع ودعم العملاء.",
@@ -70,7 +75,10 @@ export const contactLocations: SectionCopy[] = [
   },
   {
     eyebrow: { en: "Basrah", ar: "البصرة" },
-    title: { en: "Algeria District, near Benghazwan Hospital", ar: "حي الجزائر، قرب مستشفى بنغزوان" },
+    title: {
+      en: "Algeria District, near Benghazwan Hospital",
+      ar: "حي الجزائر، قرب مستشفى بنغزوان",
+    },
     description: {
       en: "Regional support for southern customers and on-site coordination.",
       ar: "دعم إقليمي لعملائنا في الجنوب وتنسيق ميداني مباشر.",
@@ -119,7 +127,8 @@ export const siteCopy = {
     tagline: "Technology infrastructure for modern organisations",
     hero: {
       eyebrow: "Data centers • Cloud • Security • Networking",
-      title: "EJAF designs dependable digital foundations for companies that cannot afford downtime.",
+      title:
+        "EJAF designs dependable digital foundations for companies that cannot afford downtime.",
       description:
         "We combine infrastructure planning, security, and support into a clear operating model that feels premium, stable, and ready for growth.",
       primaryCta: "Explore services",
@@ -140,18 +149,21 @@ export const siteCopy = {
       blogDescription:
         "Technical articles and business notes that can later be connected to Laravel endpoints without changing the UI.",
       techSuccessEyebrow: "Technological success",
-      techSuccessTitle: "We focus on clear delivery, practical value, and long-term reliability.",
+      techSuccessTitle:
+        "We focus on clear delivery, practical value, and long-term reliability.",
       techSuccessDescription:
         "The goal is to reduce operational burden and provide systems that stay dependable as your business grows.",
       techSuccessCardText: "Strategic coverage and clean delivery.",
       viewServices: "View services",
       viewProjects: "View projects",
       whoWeAreEyebrow: "Who we are",
-      whoWeAreTitle: "Ejaf Technology is a trusted source in IT services, security, and support.",
+      whoWeAreTitle:
+        "Ejaf Technology is a trusted source in IT services, security, and support.",
       whoWeAreDescription:
         "We help organizations across Iraq reduce complexity, improve security, and move forward with reliable technology.",
       locationsTitle: "Three domestic locations",
-      locationsText: "Erbil, Baghdad, and Basrah help us support clients across the country.",
+      locationsText:
+        "Erbil, Baghdad, and Basrah help us support clients across the country.",
       contactFootnote:
         "Erbil, Baghdad, and Basrah give EJAF a nationwide support footprint for implementation and follow-through.",
     },
@@ -164,7 +176,8 @@ export const siteCopy = {
       adminTitle: "Admin Workspace",
       operationalCoverage: "Operational coverage built for scale.",
       servicesCapabilities: "Capabilities",
-      servicesCapabilitiesTitle: "Built for data centers, cloud, security, and networking.",
+      servicesCapabilitiesTitle:
+        "Built for data centers, cloud, security, and networking.",
       servicesCapabilitiesDescription:
         "The service catalog stays close to the original site while being structured for future API delivery and Laravel integration.",
       blogFeaturedLabel: "Blog",
@@ -182,7 +195,8 @@ export const siteCopy = {
       description:
         "Use the form below to request a consultation, share a requirement, or discuss a deployment plan.",
       formTitle: "Send a message",
-      formNote: "This is a frontend-only form shell that can later connect to Laravel validation and storage.",
+      formNote:
+        "This is a frontend-only form shell that can later connect to Laravel validation and storage.",
       locationsTitle: "Office locations",
       phoneLabel: "Phone",
       emailLabel: "Email",
@@ -231,14 +245,16 @@ export const siteCopy = {
       blogDescription:
         "مقالات تقنية وملاحظات أعمال يمكن ربطها لاحقاً بنقاط نهاية Laravel دون تغيير الواجهة.",
       techSuccessEyebrow: "النجاح التقني",
-      techSuccessTitle: "نركز على التسليم الواضح والقيمة العملية والموثوقية طويلة الأمد.",
+      techSuccessTitle:
+        "نركز على التسليم الواضح والقيمة العملية والموثوقية طويلة الأمد.",
       techSuccessDescription:
         "الهدف هو تقليل الأعباء التشغيلية وتوفير أنظمة تظل موثوقة مع نمو أعمالك.",
       techSuccessCardText: "تغطية استراتيجية وتسليم نظيف.",
       viewServices: "عرض الخدمات",
       viewProjects: "عرض المشاريع",
       whoWeAreEyebrow: "من نحن",
-      whoWeAreTitle: "EJAF Technology مصدر موثوق في خدمات تقنية المعلومات والأمن والدعم.",
+      whoWeAreTitle:
+        "EJAF Technology مصدر موثوق في خدمات تقنية المعلومات والأمن والدعم.",
       whoWeAreDescription:
         "نساعد المؤسسات في العراق على تقليل التعقيد وتحسين الأمن والمضي قدماً بتقنية موثوقة.",
       locationsTitle: "ثلاثة مكاتب محلية",
@@ -255,7 +271,8 @@ export const siteCopy = {
       adminTitle: "مساحة الإدارة",
       operationalCoverage: "تغطية تشغيلية مبنية للتوسع.",
       servicesCapabilities: "القدرات",
-      servicesCapabilitiesTitle: "مصممة لمراكز البيانات والسحابة والأمن والشبكات.",
+      servicesCapabilitiesTitle:
+        "مصممة لمراكز البيانات والسحابة والأمن والشبكات.",
       servicesCapabilitiesDescription:
         "يبقى كتالوج الخدمات قريباً من الموقع الأصلي مع هيكلة لتسليم API مستقبلي وتكامل Laravel.",
       blogFeaturedLabel: "المدونة",

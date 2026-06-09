@@ -8,10 +8,10 @@ import { createLocalizedHref } from "@/lib/i18n";
 import type { Locale } from "@/lib/content-types";
 
 const capabilities = [
-  { icon: "server",  titleKey: "Data Centers",  descKey: "infraDesc1" },
-  { icon: "cloud",   titleKey: "Cloud",          descKey: "infraDesc2" },
-  { icon: "shield",  titleKey: "Security",       descKey: "infraDesc3" },
-  { icon: "network", titleKey: "Networking",     descKey: "infraDesc4" },
+  { icon: "server", titleKey: "Data Centers", descKey: "infraDesc1" },
+  { icon: "cloud", titleKey: "Cloud", descKey: "infraDesc2" },
+  { icon: "shield", titleKey: "Security", descKey: "infraDesc3" },
+  { icon: "network", titleKey: "Networking", descKey: "infraDesc4" },
 ] as const;
 
 type HomeHeroProps = {
@@ -37,8 +37,12 @@ export function HomeHero({ locale }: HomeHeroProps) {
 
             <Reveal delay={0.08}>
               <div className="space-y-5">
-                <h1 className="text-4xl font-semibold tracking-tight text-white text-balance sm:text-5xl md:text-6xl lg:text-7xl">{copy.hero.title}</h1>
-                <p className="max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">{copy.hero.description}</p>
+                <h1 className="text-4xl font-semibold tracking-tight text-white text-balance sm:text-5xl md:text-6xl lg:text-7xl">
+                  {copy.hero.title}
+                </h1>
+                <p className="max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+                  {copy.hero.description}
+                </p>
               </div>
             </Reveal>
 
@@ -65,8 +69,12 @@ export function HomeHero({ locale }: HomeHeroProps) {
             {siteStats.map((stat, index) => (
               <Reveal key={stat.label[locale]} delay={0.04 * index}>
                 <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] px-6 py-5 shadow-lg shadow-cyan-950/10 backdrop-blur transition-transform duration-300 hover:-translate-y-1">
-                  <p className="text-3xl font-semibold text-white">{stat.value}</p>
-                  <p className="mt-2 text-sm uppercase tracking-[0.2em] text-slate-400">{stat.label[locale]}</p>
+                  <p className="text-3xl font-semibold text-white">
+                    {stat.value}
+                  </p>
+                  <p className="mt-2 text-sm uppercase tracking-[0.2em] text-slate-400">
+                    {stat.label[locale]}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -97,8 +105,12 @@ export function HomeHero({ locale }: HomeHeroProps) {
                     <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:radial-gradient(120px_circle_at_50%_0%,rgba(34,211,238,0.07),transparent)]" />
                     <IconMark name={icon} />
                     <div>
-                      <h3 className="text-base font-semibold text-white">{label}</h3>
-                      <p className="mt-1.5 text-sm leading-6 text-slate-400">{descriptions[i]}</p>
+                      <h3 className="text-base font-semibold text-white">
+                        {label}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-6 text-slate-400">
+                        {descriptions[i]}
+                      </p>
                     </div>
                     {/* bottom accent on hover */}
                     <div className="absolute bottom-0 left-6 right-6 h-px scale-x-0 bg-gradient-to-r from-cyan-400/50 to-indigo-400/50 transition-transform duration-500 group-hover:scale-x-100" />

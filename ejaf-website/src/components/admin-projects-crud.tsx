@@ -43,26 +43,25 @@ export function AdminProjectsCrud({ initial, isAr }: Props) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    if (
-      !form.title_en.trim() ||
-      !form.title_ar.trim() ||
-      !form.description_en.trim() ||
-      !form.description_ar.trim() ||
-      !form.technologies.en.trim() ||
-      !form.technologies.ar.trim()
-    ) {
-      setError(
-        isAr
-          ? "الرجاء تعبئة كافة الحقول والتقنيات باللغتين!"
-          : "Please fill all fields and technologies in both languages!",
-      );
-      return;
-    }
-
     setLoading(true);
     setError("");
 
+    // 1. فك النص المفصول بفاصلة وتحويله إلى مصفوفة (Array) حقيقية تطابق شرط Laravel تماماً
+    const techEnArray = form.technologies.en
+      ? form.technologies.en
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : [];
+
+    const techArArray = form.technologies.ar
+      ? form.technologies.ar
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : [];
+
+    // 2. بناء الـ payload المتوافق 100% مع الـ Controller
     const payload = {
       title_en: form.title_en,
       title_ar: form.title_ar,
@@ -70,42 +69,56 @@ export function AdminProjectsCrud({ initial, isAr }: Props) {
       description_ar: form.description_ar,
       image: form.image || null,
       technologies: {
-        en: form.technologies.en,
-        ar: form.technologies.ar,
+        en: techEnArray, // تم تمرير مصفوفة Array
+        ar: techArArray, // تم تمرير مصفوفة Array
       },
     };
 
     try {
       if (editId) {
-        await updateProject(editId, payload);
+        await updateProject(editId, payload, isAr);
+
+        // تحديث الـ state بالـ form الأصلي للحفاظ على متطلبات TypeScript والواجهة
         setRecords(
           records.map((r) => (r.id === editId ? { ...form, id: editId } : r)),
         );
       } else {
-        const created = await createProject(payload);
+        const created = await createProject(payload, isAr);
         setRecords([...records, { ...form, id: String(created.id) }]);
       }
+
+      // تصفير وإعادة تهيئة النموذج بعد النجاح
       setForm(empty());
       setEditId(null);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : isAr
-            ? "حدث خطأ أثناء الحفظ"
-            : "An error occurred while saving",
-      );
+    } catch (err: any) {
+      console.error("Project Save Error:", err);
+
+      // التقطي الأخطاء واعرضيها بالإنجليزية أو العربية بناءً على لغة الواجهة الحالية isAr
+      if (err.status === 422 || err.message?.includes("Validation")) {
+        setError(
+          isAr
+            ? "فشل حفظ المشروع: يرجى التأكد من تعبئة كافة الحقول المطلوبة باللغتين العربية والإنجليزية."
+            : "Failed to save project: Please ensure all required fields are filled correctly in both English and Arabic.",
+        );
+      } else {
+        setError(
+          err instanceof Error
+            ? err.message
+            : isAr
+              ? "حدث خطأ غير متوقع أثناء الحفظ"
+              : "An unexpected error occurred while saving",
+        );
+      }
     } finally {
       setLoading(false);
     }
   }
-
   async function handleDelete(id: string) {
     if (!confirm(isAr ? "هل أنت متأكد من الحذف؟" : "Are you sure?")) return;
     try {
-      await deleteProject(id);
+      await deleteProject(id, isAr);
       setRecords(records.filter((r) => r.id !== id));
     } catch (err: unknown) {
       alert(

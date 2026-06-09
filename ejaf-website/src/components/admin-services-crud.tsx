@@ -69,10 +69,10 @@ export function AdminServicesCrud({ initial, isAr }: Props) {
 
     try {
       if (editId) {
-        const updated = await updateService(editId, payload);
+        const updated = await updateService(editId, payload, isAr);
         setRecords(records.map((r) => (r.id === editId ? { ...updated } : r)));
       } else {
-        const created = await createService(payload);
+        const created = await createService(payload, isAr);
         setRecords([
           ...records,
           {
@@ -107,7 +107,7 @@ export function AdminServicesCrud({ initial, isAr }: Props) {
   async function handleDelete(id: string) {
     if (!confirm(isAr ? "هل أنت متأكد من الحذف؟" : "Are you sure?")) return;
     try {
-      await deleteService(id);
+      await deleteService(id, isAr);
       setRecords(records.filter((r) => r.id !== id));
     } catch (err: unknown) {
       alert(

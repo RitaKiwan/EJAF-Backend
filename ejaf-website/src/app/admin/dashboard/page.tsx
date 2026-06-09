@@ -7,14 +7,23 @@ import {
   Layers,
   FolderKanban,
   BookOpen,
+  Mail,
+  MapPin,
+  Users,
   ArrowUpRight,
   Loader2,
 } from "lucide-react";
 
 import { AdminShell } from "@/components/admin-shell";
-import { getBlogApi, getProjectsApi, getServicesApi } from "@/lib/api";
+import {
+  getBlogApi,
+  getProjectsApi,
+  getServicesApi,
+  getMessagesApi,
+  getLocationsApi,
+} from "@/lib/api";
 import { resolveLocale } from "@/lib/i18n";
-import { isLoggedIn } from "@/lib/admin-api"; // استيراد دالة التحقق المفيدة التي كتبتها
+import { isLoggedIn } from "@/lib/admin-api";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -22,37 +31,45 @@ export default function AdminDashboardPage() {
   const lang = searchParams.get("lang");
   const isAr = lang === "ar";
 
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [counts, setCounts] = useState({ services: 0, projects: 0, posts: 0 });
+  const [counts, setCounts] = useState({
+    services: 0,
+    projects: 0,
+    posts: 0,
+    messages: 0,
+    locations: 0,
+  });
 
   useEffect(() => {
-
     if (!isLoggedIn()) {
       router.push(lang ? `/admin/login?lang=${lang}` : "/admin/login");
       return;
     }
 
-
     async function fetchDashboardData() {
       try {
         const locale = resolveLocale(lang);
-        const [services, projects, posts] = await Promise.all([
-          getServicesApi(locale).catch(() => []), 
-          getProjectsApi(locale).catch(() => []),
-          getBlogApi(locale).catch(() => []),
-        ]);
+        const [services, projects, posts, messages, locations] =
+          await Promise.all([
+            getServicesApi(locale).catch(() => []),
+            getProjectsApi(locale).catch(() => []),
+            getBlogApi(locale).catch(() => []),
+            getMessagesApi().catch(() => []),
+            getLocationsApi().catch(() => []),
+          ]);
 
         setCounts({
           services: services?.length || 0,
           projects: projects?.length || 0,
           posts: posts?.length || 0,
+          messages: messages?.length || 0,
+          locations: locations?.length || 0,
         });
-      } catch (err) {
+      } catch {
         setError(
           isAr
-            ? "فشل في الاتصال بالسيرفر وجلب البيانات"
+            ? "فشل في الاتصال بالسيرفر"
             : "Failed to connect to backend server",
         );
       } finally {
@@ -62,7 +79,6 @@ export default function AdminDashboardPage() {
 
     fetchDashboardData();
   }, [lang, router]);
-
 
   if (loading) {
     return (
@@ -103,6 +119,36 @@ export default function AdminDashboardPage() {
       ring: "ring-purple-400/20",
       bg: "bg-purple-400/10",
     },
+    {
+      icon: Mail,
+      count: counts.messages,
+      label: isAr ? "الرسائل" : "Messages",
+      desc: isAr ? "عرض رسائل التواصل" : "View contact messages",
+      href: "/admin/messages",
+      color: "text-emerald-300",
+      ring: "ring-emerald-400/20",
+      bg: "bg-emerald-400/10",
+    },
+    {
+      icon: MapPin,
+      count: counts.locations,
+      label: isAr ? "المواقع" : "Locations",
+      desc: isAr ? "إدارة المواقع الجغرافية" : "Manage office locations",
+      href: "/admin/locations",
+      color: "text-amber-300",
+      ring: "ring-amber-400/20",
+      bg: "bg-amber-400/10",
+    },
+    {
+      icon: Users,
+      count: null,
+      label: isAr ? "الزوار" : "Visitors",
+      desc: isAr ? "إحصائيات زوار الموقع" : "Site visitor statistics",
+      href: "/admin/visitors",
+      color: "text-sky-300",
+      ring: "ring-sky-400/20",
+      bg: "bg-sky-400/10",
+    },
   ];
 
   return (
@@ -110,15 +156,14 @@ export default function AdminDashboardPage() {
       title={isAr ? "لوحة التحكم" : "Dashboard"}
       description={isAr ? "إدارة محتوى الموقع" : "Manage your site content"}
     >
-      {/* عرض رسالة تنبيهية إذا فشل السيرفر بدلاً من انهيار الصفحة بالكامل */}
       {error && (
         <div className="mb-6 rounded-xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-300">
-          {error} (تأكد من تشغيل سيرفر الـ Backend على المنفذ الصحيح)
+          {error}
         </div>
       )}
 
-      {/* Stat cards */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      {/* Content Stats */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map(
           ({ icon: Icon, count, label, desc, href, color, ring, bg }) => (
             <Link
@@ -134,32 +179,18 @@ export default function AdminDashboardPage() {
                 </span>
                 <ArrowUpRight className="h-4 w-4 text-slate-600 transition-colors group-hover:text-white" />
               </div>
-              <p className="mt-5 text-4xl font-semibold text-white">{count}</p>
+              {count !== null ? (
+                <p className="mt-5 text-4xl font-semibold text-white">
+                  {count}
+                </p>
+              ) : (
+                <p className="mt-5 text-4xl font-semibold text-white">—</p>
+              )}
               <p className="mt-1 text-base font-medium text-white">{label}</p>
               <p className="mt-0.5 text-sm text-slate-400">{desc}</p>
             </Link>
           ),
         )}
-      </div>
-
-      {/* Quick links grid */}
-      <div className="mt-6 rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-6">
-        <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">
-          {isAr ? "إجراءات سريعة" : "Quick actions"}
-        </p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {sections.map(({ icon: Icon, label, href, color }) => (
-            <Link
-              key={href}
-              href={lang ? `${href}?lang=${lang}` : href}
-              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 transition-colors hover:border-cyan-400/20 hover:text-white"
-            >
-              <Icon className={`h-4 w-4 ${color}`} strokeWidth={1.8} />
-              {isAr ? `إدارة ${label}` : `Manage ${label}`}
-              <ArrowUpRight className="ml-auto h-3.5 w-3.5 text-slate-600" />
-            </Link>
-          ))}
-        </div>
       </div>
     </AdminShell>
   );

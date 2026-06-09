@@ -18,12 +18,21 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid gap-8 rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_20px_80px_rgba(2,6,23,0.35)] backdrop-blur-xl lg:grid-cols-[1fr_auto] lg:items-end lg:p-8">
           <div className="max-w-2xl space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">{copy.brand}</p>
-            <p className="text-2xl font-semibold tracking-tight text-white text-balance">{copy.footerNote}</p>
-            <p className="max-w-xl text-sm leading-7 text-slate-400">{copy.tagline}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
+              {copy.brand}
+            </p>
+            <p className="text-2xl font-semibold tracking-tight text-white text-balance">
+              {copy.footerNote}
+            </p>
+            <p className="max-w-xl text-sm leading-7 text-slate-400">
+              {copy.tagline}
+            </p>
           </div>
 
-          <nav aria-label="Footer" className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <nav
+            aria-label="Footer"
+            className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {footerNavigationItems.map((item) => (
               <Link
                 key={item.href}

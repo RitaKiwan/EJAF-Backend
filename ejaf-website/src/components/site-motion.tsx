@@ -41,7 +41,9 @@ export function SiteMotion({ children }: { children: ReactNode }) {
                     key={columnIndex}
                     className="flex flex-col items-center justify-center gap-4 whitespace-pre leading-none"
                     initial={{ y: columnIndex % 2 === 0 ? -8 : 0 }}
-                    animate={{ y: columnIndex % 2 === 0 ? [-8, 4, -8] : [0, -4, 0] }}
+                    animate={{
+                      y: columnIndex % 2 === 0 ? [-8, 4, -8] : [0, -4, 0],
+                    }}
                     transition={{
                       duration: 42 + columnIndex * 1.1,
                       repeat: Infinity,
@@ -51,11 +53,23 @@ export function SiteMotion({ children }: { children: ReactNode }) {
                     {digits.map((digit, digitIndex) => (
                       <motion.span
                         key={digitIndex}
-                        className={digitIndex % 7 === 0 ? "text-cyan-200/40" : digitIndex % 3 === 0 ? "text-indigo-200/30" : "text-slate-300/18"}
+                        className={
+                          digitIndex % 7 === 0
+                            ? "text-cyan-200/40"
+                            : digitIndex % 3 === 0
+                              ? "text-indigo-200/30"
+                              : "text-slate-300/18"
+                        }
                         initial={{ opacity: 0.1, scale: 0.96 }}
-                        animate={{ opacity: [0.1, 0.85, 0.18], scale: [0.96, 1, 0.98] }}
+                        animate={{
+                          opacity: [0.1, 0.85, 0.18],
+                          scale: [0.96, 1, 0.98],
+                        }}
                         transition={{
-                          duration: 3.8 + (columnIndex % 3) * 0.45 + (digitIndex % 4) * 0.18,
+                          duration:
+                            3.8 +
+                            (columnIndex % 3) * 0.45 +
+                            (digitIndex % 4) * 0.18,
                           repeat: Infinity,
                           ease: "easeInOut",
                           delay: columnIndex * 0.08 + digitIndex * 0.06,
