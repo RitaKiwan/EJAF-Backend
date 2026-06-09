@@ -1,5 +1,23 @@
 {
+<<<<<<< HEAD
   "dependencies": {
     "lucide-react": "^1.17.0"
   }
+=======
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.0",
+        "axios": "^1.11.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^2.0.0",
+        "tailwindcss": "^4.0.0",
+        "vite": "^7.0.7"
+    }
+>>>>>>> 77822f1652ee102c7805e520b7314914cdf7c05f
 }
