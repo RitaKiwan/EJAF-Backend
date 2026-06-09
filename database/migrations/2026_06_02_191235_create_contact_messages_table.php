@@ -15,6 +15,8 @@ return new class extends Migration
         $table->id();
         $table->string('name');
         $table->string('email');
+        $table->string('phone')->nullable();
+        $table->string('phone_code')->default('+964');
         $table->string('subject');
         $table->text('message');
         $table->timestamp('read_at')->nullable(); 

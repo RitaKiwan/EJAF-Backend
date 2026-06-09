@@ -1,12 +1,50 @@
 <?php
 
 return [
-    'paths' => ['api/*'],
-    'allowed_methods' => ['*'],
-    'allowed_origins' => ['http://localhost:3001', 'http://localhost:3000'],
+    /*
+    |--------------------------------------------------------------------------
+    | المسارات التي تخضع لـ CORS
+    |--------------------------------------------------------------------------
+    */
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | الدومينات المسموح لها بالاتصال
+    | ✅ أضف دومين موقعك الحقيقي هنا
+    |--------------------------------------------------------------------------
+    */
+    'allowed_origins' => [
+        // Development
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+
+        // Production ← ضع دومينك الحقيقي هنا
+        'https://your-domain.com',
+        'https://www.your-domain.com',
+    ],
+
     'allowed_origins_patterns' => [],
-    'allowed_headers' => ['*'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | الـ Headers المسموح بها
+    | ✅ محددة بدل * لأمان أفضل
+    |--------------------------------------------------------------------------
+    */
+    'allowed_headers' => [
+        'Content-Type',
+        'Authorization',
+        'Accept',
+        'X-Requested-With',
+    ],
+
     'exposed_headers' => [],
-    'max_age' => 0,
+
+    // ✅ Cache لـ preflight requests لمدة ساعة — يحسن الأداء
+    'max_age' => 3600,
+
     'supports_credentials' => false,
 ];

@@ -67,7 +67,10 @@ class ServiceSeeder extends Seeder
         ];
 
         foreach ($services as $service) {
-            Service::create($service);
+            Service::firstOrCreate(
+                ['title_en' => $service['title_en']], // تحقق بالعنوان
+                $service
+            );
         }
     }
 }

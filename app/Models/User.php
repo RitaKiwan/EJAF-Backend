@@ -13,7 +13,7 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
-        'is_admin',
+        // ✅ is_admin محذوف من fillable — لا يُعدَّل إلا من قاعدة البيانات مباشرة أو Seeder
     ];
 
     protected $hidden = [

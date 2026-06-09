@@ -61,7 +61,10 @@ class PostSeeder extends Seeder
         ];
 
         foreach ($posts as $post) {
-            Post::create($post);
+            Post::firstOrCreate(
+                ['slug' => $post['slug']], // تحقق بالـ slug
+                $post
+            );
         }
     }
 }
